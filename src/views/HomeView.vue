@@ -1,13 +1,29 @@
 <script setup lang="ts">
+import { ref, Ref } from 'vue'
 import { usePostStore } from '@/stores/post'
 
 const post = usePostStore()
 
 //use fetchPosts method in post store
-post.fetchPosts()
+post.fetchPosts(1)
+
+function goToNextPage(): void {
+  post.fetchPosts(post.currentPage + 1)
+}
+
+function goToPreviousPage(): void {
+  post.fetchPosts(post.currentPage - 1)
+}
+//go to page
+function goToPage(pageNumber: number): void {
+  post.fetchPosts(pageNumber)
+}
 </script>
 
 <template>
+  <div class="container">
+    <h1>Current Page is {{ post.currentPage }}</h1>
+  </div>
   <div class="container mx-auto px-4">
     <div class="flex flex-wrap -mx-4 gap-x-4 gap-y-6">
       <div
@@ -17,7 +33,7 @@ post.fetchPosts()
         <RouterLink :to="'/blog/' + post.slug">
           <img
             class="rounded-t-lg"
-            :src="'http://127.0.0.1:8001/storage/' + post.featured_image"
+            :src="'http://127.0.0.1:8000/storage/' + post.featured_image"
             alt=""
             style="aspect-ratio: 4 / 3; object-fit: cover"
           />
@@ -55,6 +71,47 @@ post.fetchPosts()
           </a>
         </div>
       </div>
+
+      <!-- Pagination -->
+
+      <ul class="flex justify-center items-center space-x-2 mt-6">
+        <!-- Previous Page Button -->
+        <li>
+          <button
+            @click="goToPreviousPage()"
+            :disabled="post.currentPage < 2"
+            class="px-3 py-1 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600"
+          >
+            Prev page
+          </button>
+        </li>
+
+        <!-- Page Numbers -->
+        <li v-for="i in post.lastPage" :key="i">
+          <button
+            @click="goToPage(i)"
+            :disabled="post.currentPage === i"
+            :class="{
+              'px-3 py-1 rounded-lg': true,
+              'bg-blue-500 text-white hover:bg-blue-600': post.currentPage !== i,
+              'bg-gray-300 text-gray-700 cursor-not-allowed': post.currentPage === i
+            }"
+          >
+            {{ i }}
+          </button>
+        </li>
+
+        <!-- Next Page Button -->
+        <li>
+          <button
+            @click="goToNextPage()"
+            :disabled="post.currentPage === post.lastPage"
+            class="px-3 py-1 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600"
+          >
+            Next page
+          </button>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
