@@ -7,6 +7,8 @@ const post = usePostStore()
 //use fetchPosts method in post store
 post.fetchPosts(1)
 
+
+
 function goToNextPage(): void {
   post.fetchPosts(post.currentPage + 1)
 }

@@ -14,6 +14,26 @@ const router = createRouter({
       name: 'about',
       component: () => import('../views/AboutView.vue')
     },
+
+    //İletişim Sayfası
+    {
+      path: '/contact-us',
+      name: 'contact-us',
+      component: () => null
+    },
+    //Page kategorilerinin listelendigi sayfa
+    {
+      path: '/category',
+      name: 'category',
+      component: () => null
+    },
+    //Bir kategoriden tüm postların listelendigi sayfa
+    {
+      path:'/category/:slug',
+      name:'category',
+      component: () => null,
+    },
+    // 1 page için detay sayfası
     {
       path: '/blog/:slug',
       name: 'blog-post',

@@ -9,10 +9,16 @@ export const usePostStore = defineStore('post', () => {
   const totalPosts = ref(0)
   const links = ref([])
 
-  const fetchPosts = async (paginate: null | number) => {
-    if (paginate == null) paginate = 1
+  const fetchPosts = async (paginate:number | null = 1, sort: 'asc' | 'desc' = 'asc') => {
 
-    const response = await fetch(`http://127.0.0.1:8000/api/v1/wcms/page?page=${paginate}`)
+    const query = new URLSearchParams({
+      page: paginate.toString(),
+      sort: sort
+    }).toString();
+
+    const response = await fetch(`http://127.0.0.1:8000/api/v1/wcms/page?${query}`)
+    console.log(query);
+    
     const data = await response.json()
 
     posts.value = data.data
