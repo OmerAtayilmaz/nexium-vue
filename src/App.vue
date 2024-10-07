@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
+
+const isAuthenticated = ref(localStorage.getItem('auth_token') ? true : false)
+
+const logout = () => {
+  localStorage.removeItem('auth_token')
+  isAuthenticated.value = false
+  alert('logged out')
+}
 </script>
 
 <template>
@@ -10,9 +19,9 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav class="flex">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/category">Category</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/signup">Signup</RouterLink>
-        <button>Logout</button>
+        <RouterLink v-if="!isAuthenticated" to="/login">Login</RouterLink>
+        <RouterLink v-if="!isAuthenticated" to="/signup">Signup</RouterLink>
+        <button v-if="isAuthenticated" @click="logout">Logout</button>
       </nav>
     </div>
   </header>
