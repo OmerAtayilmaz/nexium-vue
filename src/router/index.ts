@@ -5,6 +5,16 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/auth/LoginView.vue')
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../views/auth/SignupView.vue')
+    },
+    {
       path: '/',
       name: 'home',
       component: HomeView
@@ -25,14 +35,24 @@ const router = createRouter({
     {
       path: '/category',
       name: 'category',
-      component: () => null
+      component: () => import('../views/layouts/CategoryLayouts.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('../views/CategoryView.vue'),
+          props: true,
+          name: 'category-list'
+        },
+
+        {
+          path: ':slug',
+          component: () => import('../views/CategoryDetailView.vue'),
+          props: true,
+          name: 'category-detail'
+        }
+      ]
     },
-    //Bir kategoriden tüm postların listelendigi sayfa
-    {
-      path:'/category/:slug',
-      name:'category',
-      component: () => null,
-    },
+
     // 1 page için detay sayfası
     {
       path: '/blog/:slug',
